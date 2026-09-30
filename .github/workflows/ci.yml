@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest          # GitHub gives this job a fresh Ubuntu VM
     steps:
       - uses: actions/checkout@v4   # download the repo onto the VM
+  #     - name: Manual Checkout
+  # run: |
+  #   git init
+  #   git remote add origin https://github.com/${{ github.repository }}.git
+  #   git fetch --depth=1 origin ${{ github.sha }}
+  #   git checkout ${{ github.sha }}
 
       - uses: actions/setup-dotnet@v4
         with:
