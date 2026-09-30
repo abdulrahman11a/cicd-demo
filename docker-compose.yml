@@ -1,0 +1,10 @@
+# Run locally from source:    docker compose up --build
+# Run what is on Docker Hub:  docker run --rm -p 8080:8080 <user>/cicd-demo:prod
+services:
+  api:
+    build:
+      context: .
+      args:
+        GIT_SHA: local
+    ports:
+      - "8080:8080"

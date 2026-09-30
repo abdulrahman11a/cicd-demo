@@ -1,0 +1,37 @@
+# Continuous Integration: runs on every Pull Request and every push to a non-main branch.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest          # GitHub gives this job a fresh Ubuntu VM
+    steps:
+      - uses: actions/checkout@v4   # download the repo onto the VM
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+
+      - run: dotnet restore
+      - run: dotnet build --no-restore -c Release
+      - run: dotnet test --no-build -c Release --logger trx --results-directory TestResults
+
+      # Keep the test report even when tests fail, so you can download it
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: TestResults
+
+      - name: Verify the Docker image builds
+        run: docker build -t cicd-demo:ci .
