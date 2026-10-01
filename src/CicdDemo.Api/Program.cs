@@ -7,14 +7,6 @@ var products = new[]
     new Product(2, "Mouse", 20m),
     new Product(3, "Monitor", 180m),
 };
-
-
-
-
-
-
-
-
 // Root: shows which version (commit) is running.
 app.MapGet("/", () => new
 {
